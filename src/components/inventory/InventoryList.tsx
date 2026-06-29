@@ -7,7 +7,6 @@ import {
   Card,
   Typography,
   Tag,
-  message,
   Modal,
   Select,
   InputNumber,
@@ -30,6 +29,7 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
+import { message } from '../../utils/message';
 import { invetroryAPI, supplierAPI } from '../../services/api';
 const { Title, Text } = Typography;
 //const { Search } = Input;

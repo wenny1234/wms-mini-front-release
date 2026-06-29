@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Button, Input, Space, Card, message,Typography, Select } from 'antd';
+import { Table, Button, Input, Space, Card, Typography, Select } from 'antd';
 import { SearchOutlined, PlusOutlined, EditOutlined, BarcodeOutlined } from '@ant-design/icons';
+import { message } from '../../utils/message';
 import { productAPI } from '../../services/api';
 
 const { Title } = Typography;

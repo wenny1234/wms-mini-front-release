@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Form, Input, InputNumber, Select, Button, Card, Typography, message,
+  Form, Input, InputNumber, Select, Button, Card, Typography,
   Table, Space, Tag, Modal, Popconfirm, Collapse
 } from 'antd';
+import { message } from '../../utils/message';
 import {
   BarcodeOutlined, ScanOutlined, SaveOutlined, ArrowLeftOutlined,
   DeleteOutlined, PlusOutlined, MinusCircleOutlined,
@@ -41,7 +42,7 @@ const operationList: { value: OperationType; label: string; icon: React.ReactNod
   { value: '01', label: '通常入庫', icon: <ImportOutlined /> },
   { value: '02', label: '通常出庫', icon: <ExportOutlined /> },
   { value: '03', label: '返品入庫', icon: <RollbackOutlined /> },
-  { value: '04', label: '移動入庫', icon: <SwapOutlined /> },
+  { value: '04', label: '在庫移動', icon: <SwapOutlined /> },
   { value: '06', label: '棚卸差異入庫', icon: <AuditOutlined /> },// DBコードは06にしているが，画面の並び順と合わせて
   { value: '05', label: '棚卸差異出庫', icon: <AuditOutlined /> },
   { value: '07', label: '廃棄出庫', icon: <DeleteOutlined /> },
@@ -170,9 +171,9 @@ const BarcodeProductRegistration: React.FC = () => {
       return;
     }
 
-    // 移動入庫の場合、倉庫と移動先倉庫が同じであってはならない
+    // 在庫移動の場合、倉庫と移動先倉庫が同じであってはならない
     if (selectedWarehouse === selectedMoveWarehouse && selectedOperation === '04') {
-      message.warning(`移動入庫の場合、倉庫と移動先倉庫は異なるものを選択してください。`,5);
+      message.warning(`在庫移動の場合、倉庫と移動先倉庫は異なるものを選択してください。`,5);
       return;
     }
 

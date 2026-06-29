@@ -6,7 +6,6 @@ import {
   Button,
   Space,
   Table,
-  message,
   Radio,
   Input,
   Statistic,
@@ -20,6 +19,7 @@ import {
   DownloadOutlined,
   PrinterOutlined,
 } from '@ant-design/icons';
+import { message } from '../../utils/message';
 
 const { Title, Text } = Typography;
 

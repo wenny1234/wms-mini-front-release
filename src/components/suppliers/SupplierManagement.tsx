@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Button, Input, Card, Typography, Space, message,
+  Table, Button, Input, Card, Typography, Space,
 } from 'antd';
+import { message } from '../../utils/message';
 import {
   PlusOutlined, SaveOutlined, RollbackOutlined,
   ShopOutlined, PhoneOutlined, MailOutlined, SearchOutlined,

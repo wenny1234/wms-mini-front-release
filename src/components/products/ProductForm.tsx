@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Form, Input, InputNumber, Select, Button, Card, Typography, message, Upload, Space } from 'antd';
+import { Form, Input, InputNumber, Select, Button, Card, Typography, Upload, Space } from 'antd';
 import { UploadOutlined, SaveOutlined, ArrowLeftOutlined, BarcodeOutlined } from '@ant-design/icons';
+import { message } from '../../utils/message';
 import { productAPI } from '../../services/api';
 
 const categories = JSON.parse(sessionStorage.getItem('categories') || '[]');

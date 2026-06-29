@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Button, Input, Select, Card, Typography, Space, message,
+  Table, Button, Input, Select, Card, Typography, Space,
   Switch, Tag,
 } from 'antd';
+import { message } from '../../utils/message';
 import {
   PlusOutlined, SaveOutlined, RollbackOutlined,
   UserOutlined, ReloadOutlined, PhoneOutlined,

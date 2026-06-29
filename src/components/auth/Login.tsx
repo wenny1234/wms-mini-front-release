@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Card, Typography, message } from 'antd';
+import { Form, Input, Button, Card, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { message } from '../../utils/message';
 import { useAuth } from '../../services/AuthContext';
 
 const { Title } = Typography;

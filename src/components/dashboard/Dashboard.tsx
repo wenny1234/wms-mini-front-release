@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Card, Row, Col, Statistic, Table, Typography, Progress, Input, Select, Space, Button, message, DatePicker } from 'antd';
+import { Card, Row, Col, Statistic, Table, Typography, Progress, Input, Select, Space, Button, DatePicker } from 'antd';
 import { ShoppingOutlined, DollarOutlined, ProfileOutlined, OrderedListOutlined, SearchOutlined } from '@ant-design/icons';
+import { message } from '../../utils/message';
 const { Title } = Typography;
 import { dashboardAPI } from '../../services/api';
 import dayjs from 'dayjs';
