@@ -30,6 +30,7 @@ import {
 } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { message } from '../../utils/message';
+import { useTablePagination } from '../../utils/tablePagination';
 import { invetroryAPI, supplierAPI } from '../../services/api';
 const { Title, Text } = Typography;
 //const { Search } = Input;
@@ -105,6 +106,7 @@ const InventoryList: React.FC = () => {
   const [supplierList, setSupplierList] = useState<{ id: string; name: string }[]>([]);
   const [supplierLoading, setSupplierLoading] = useState(false);
   const warehouses = JSON.parse(sessionStorage.getItem('warehouses') || '[]');
+  const { pagination, resetPage } = useTablePagination();
 
   // 初期化：入出庫更新日に一週間前から今日までの日付を設定
   useEffect(() => {
@@ -253,6 +255,7 @@ const InventoryList: React.FC = () => {
 
   // 検索ボタンクリック
   const handleSearch = async () => {
+    resetPage();
     setSearchLoading(true);
     try {
       const dateFrom = filterDateRange?.[0]?.format('YYYY-MM-DD');
@@ -604,13 +607,7 @@ const InventoryList: React.FC = () => {
           rowKey="id"
           loading={loading}
           scroll={{ x: 2600 }}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} / ${total} 件`,
-            pageSizeOptions: ['10', '20', '50'],
-          }}
+          pagination={pagination}
           rowClassName={(record) => {
             // Check for duplicates (same janCode + snCode) - red background
             const isDuplicate = dataSource.filter(

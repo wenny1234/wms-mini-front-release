@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Table, Button, Input, Space, Card, Typography, Select } from 'antd';
 import { SearchOutlined, PlusOutlined, EditOutlined, BarcodeOutlined } from '@ant-design/icons';
 import { message } from '../../utils/message';
+import { useTablePagination } from '../../utils/tablePagination';
 import { productAPI } from '../../services/api';
 
 const { Title } = Typography;
@@ -28,9 +29,11 @@ const ProductList: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [apiProducts, setApiProducts] = useState<Product[] | null>(null);
   const categories = JSON.parse(sessionStorage.getItem('categories') || '[]');
+  const { pagination, resetPage } = useTablePagination();
 
   // 検索ボタン押下時の処理
   const handleSearch = async () => {
+    resetPage();
     setLoading(true);
     try {
       const params: any = {};
@@ -199,12 +202,7 @@ const ProductList: React.FC = () => {
           dataSource={filteredProducts}
           rowKey="id"
           loading={loading}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} / ${total} 件`,
-          }}
+          pagination={pagination}
         />
       </Card>
     </div>

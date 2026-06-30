@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Row, Col, Statistic, Table, Typography, Progress, Input, Select, Space, Button, DatePicker } from 'antd';
 import { ShoppingOutlined, DollarOutlined, ProfileOutlined, OrderedListOutlined, SearchOutlined } from '@ant-design/icons';
 import { message } from '../../utils/message';
+import { useTablePagination } from '../../utils/tablePagination';
 const { Title } = Typography;
 import { dashboardAPI } from '../../services/api';
 import dayjs from 'dayjs';
@@ -30,9 +31,11 @@ const Dashboard: React.FC = () => {
   const [filterDateRange, setFilterDateRange] = useState<[dayjs.Dayjs | null, dayjs.Dayjs | null] | null>([dayjs().subtract(6, 'day'), dayjs()]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [dataSource, setDataSource] = useState(allOrders);
+  const { pagination, resetPage } = useTablePagination();
 
   // 検索ボタンクリック
   const handleSearch = async () => {
+    resetPage();
     setSearchLoading(true);
     try {
       const dateFrom = filterDateRange?.[0]?.format('YYYY-MM-DD');
@@ -250,12 +253,7 @@ const Dashboard: React.FC = () => {
           //rowKey="id"
           size="large"
           style={{ fontSize: 28 }}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showQuickJumper: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} / ${total} 件`,
-          }}
+          pagination={pagination}
         />
       </Card>
     </div>
