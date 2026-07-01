@@ -242,7 +242,17 @@ export const invetroryAPI = {
       console.error('Update product error:', error);
       throw error;
     }
-  }
+  },
+  // 入出庫データ削除API
+  deleteinventoryData: async (inventoryData: any) => {
+    try {
+      const response = await api.post('/inventory/deleteinventoryData', inventoryData);
+      return response.data;
+    } catch (error) {
+      console.error('Delete inventory error:', error);
+      throw error;
+    }
+  },
 }
 
 // ユーザー管理API

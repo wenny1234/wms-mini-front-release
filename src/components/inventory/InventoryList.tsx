@@ -23,7 +23,7 @@ import {
   // ImportOutlined,
   // ExportOutlined,
   // RollbackOutlined,
-  // DeleteOutlined,
+  DeleteOutlined,
   PlayCircleOutlined,
   // EyeOutlined,
   SaveOutlined,
@@ -292,6 +292,36 @@ const InventoryList: React.FC = () => {
     });
   };
 
+  // 商品削除確認ポップアップ
+  const handleDelete = (record: InventoryItem) => {
+    Modal.confirm({
+      title: '在庫削除確認',
+      content: `選択した在庫商品(${record.name})を削除しますか？`,
+      okText: '削除',
+      cancelText: 'キャンセル',
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        setExecutingRows((prev) => ({ ...prev, [record.id]: true }));
+        try {
+          const deleteData: any = {
+            ...record,
+            supplier: supplierValues[record.id] ?? record.supplier,
+            costPrice: costPriceValues[record.id] ?? record.costPrice,
+            shippingPrice: shippingPriceValues[record.id] ?? record.shippingPrice,
+            reason: recordReasons[record.id] ?? record.reason,
+          };
+          await invetroryAPI.deleteinventoryData(deleteData);
+          setDataSource((prev) => prev.filter((item) => item.id !== record.id));
+          message.success('削除処理が完了しました', 5);
+        } catch (error) {
+          message.error('削除処理に失敗しました', 5);
+        } finally {
+          setExecutingRows((prev) => ({ ...prev, [record.id]: false }));
+        }
+      },
+    });
+  };
+
   const columns: any[] = [
     {
       title: '商品名',
@@ -488,18 +518,30 @@ const InventoryList: React.FC = () => {
     {
       title: '保存',
       key: 'execute',
-      width: 100,
+      width: 180,
       fixed: 'right',
       render: (_: any, record: InventoryItem) => (
-        <Button
-          type="primary"
-          icon={<SaveOutlined />}
-          onClick={() => handleSave(record)}
-          loading={executingRows[record.id]}
-          size="small"
-        >
-          保存
-        </Button>
+        <Space size="small">
+          <Button
+            type="primary"
+            icon={<SaveOutlined />}
+            onClick={() => handleSave(record)}
+            loading={executingRows[record.id]}
+            size="small"
+          >
+            保存
+          </Button>
+          <Button
+            danger
+            icon={<DeleteOutlined />}
+            onClick={() => handleDelete(record)}
+            loading={executingRows[record.id]}
+            disabled={record.status !== '未完了'}
+            size="small"
+          >
+            削除
+          </Button>
+        </Space>
       ),
     },
   ];
@@ -544,7 +586,8 @@ const InventoryList: React.FC = () => {
       </div>
 
       <Card style={{ marginBottom: 16 }}>
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', flex: 1 }}>
           <div>
             <Text strong style={{ display: 'block', marginBottom: 4 }}>商品名</Text>
             <Input
@@ -597,6 +640,40 @@ const InventoryList: React.FC = () => {
               </Checkbox>
             </Space>
           </div>
+          </div>
+          <div style={{ marginLeft: 'auto', padding: '8px 12px', background: '#fafafa', borderRadius: 6, border: '1px solid #f0f0f0' }}>
+            <Text strong style={{ display: 'block', marginBottom: 8, fontSize: 13 }}></Text>
+            <Space direction="vertical" size={6}>
+              <Space size={8}>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: 18,
+                    height: 18,
+                    backgroundColor: '#ffccc7',
+                    border: '1px solid #ffa39e',
+                    borderRadius: 2,
+                    flexShrink: 0,
+                  }}
+                />
+                <Text style={{ fontSize: 13 }}>同じ商品のSNコードが重複</Text>
+              </Space>
+              <Space size={8}>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    width: 18,
+                    height: 18,
+                    backgroundColor: '#ffffb8',
+                    border: '1px solid #fffb8f',
+                    borderRadius: 2,
+                    flexShrink: 0,
+                  }}
+                />
+                <Text style={{ fontSize: 13 }}>理由・備考あり</Text>
+              </Space>
+            </Space>
+          </div>
         </div>
       </Card>
 
@@ -612,14 +689,14 @@ const InventoryList: React.FC = () => {
             // Check for duplicates (same janCode + snCode) - red background
             const isDuplicate = dataSource.filter(
               (item) => item.janCode === record.janCode && item.snCode === record.snCode 
-              && (record.warehouseStatus === '通常入庫' || record.warehouseStatus === '返品入庫') 
+              && (record.warehouseStatus === '通常入庫' || record.warehouseStatus === '返品入庫' || record.warehouseStatus === '在庫移動') 
               && record.snCode !== ''// snCodeが空のレコードは重複判定から除外(現時点はない)
             ).length > 1;
 
             // Check if reason has content - yellow background
             const hasReason = !!(record.reason || recordReasons[record.id]);
 
-            // Priority: duplicate (red) > reason (yellow) > out-of-stock > low-stock
+            // Priority: duplicate (red) > reason (yellow) 
             if (isDuplicate) return 'row-duplicate';
             if (hasReason) return 'row-has-reason';
             return '';

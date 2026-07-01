@@ -18,6 +18,9 @@ import { useAuth } from '../../services/AuthContext';
 
 const { Header, Sider, Content } = AntLayout;
 
+const SIDER_WIDTH = 200;
+const SIDER_COLLAPSED_WIDTH = 80;
+
 const Layout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
@@ -111,11 +114,14 @@ const Layout: React.FC = () => {
   return (
     <AntLayout style={{ minHeight: '100vh' }}>
       <Sider
+        className="app-sider"
         trigger={null}
         collapsible
         collapsed={collapsed}
+        width={SIDER_WIDTH}
+        collapsedWidth={SIDER_COLLAPSED_WIDTH}
         style={{
-          overflow: 'auto',
+          overflow: 'hidden',
           height: '100vh',
           position: 'fixed',
           left: 0,
@@ -140,12 +146,14 @@ const Layout: React.FC = () => {
         <Menu
           theme="dark"
           mode="inline"
+          inlineCollapsed={collapsed}
+          tooltip={false}
           selectedKeys={[location.pathname]}
           items={menuItems}
           style={{ background: '#1a1a2e', borderRight: 0 }}
         />
       </Sider>
-      <AntLayout style={{ marginLeft: collapsed ? 80 : 200, transition: 'all 0.2s', background: '#f5f6fa' }}>
+      <AntLayout style={{ marginLeft: collapsed ? SIDER_COLLAPSED_WIDTH : SIDER_WIDTH, transition: 'all 0.2s', background: '#f5f6fa' }}>
         <Header style={{ 
           padding: '0 16px', 
           background: '#1a1a2e',

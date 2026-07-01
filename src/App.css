@@ -82,6 +82,15 @@ code {
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Prevent menu label flash when sider collapses/expands */
+.app-sider .ant-menu {
+  overflow: hidden;
+}
+
+.app-sider .ant-menu-inline-collapsed-tooltip {
+  display: none !important;
+}
+
 /* Utility classes */
 .text-center {
   text-align: center;
